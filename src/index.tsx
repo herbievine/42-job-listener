@@ -4,6 +4,7 @@ import * as s from "./db/schema";
 import { and, desc, eq, isNotNull, isNull, like, or } from "drizzle-orm";
 import { Resend, type CreateEmailOptions } from "resend";
 import { z } from "zod";
+import dayjs from "dayjs";
 
 const app = new Hono();
 const resend = new Resend(Bun.env.RESEND_API_KEY);
@@ -94,24 +95,27 @@ app.get("/", async (c) => {
                         </span>
                       </div>
                       <div class="px-4 py-2" dangerouslySetInnerHTML={{ __html: offer.emailHtml ?? "" }} />
-                      {!offer.sentEmail ? (
-                        <div class="px-4 py-2 flex justify-end space-x-2">
-                          <form action={`/mark/${offer.id}`} method="post" target="dummy">
-                            <button class="font-semibold underline" type="submit">
-                              Already sent?
-                            </button>
-                          </form>
-                          <form action={`/send/${offer.id}`} method="post" target="dummy">
-                            <button class="font-semibold underline" type="submit">
-                              Send!
-                            </button>
-                          </form>
-                        </div>
-                      ) : (
-                        <div class="px-4 py-2 flex justify-end">
-                          <span class="font-semibold">Already sent!</span>
-                        </div>
-                      )}
+                      <div class="px-4 py-2 flex justify-between items-center">
+                        <strong class="font-semibold">{dayjs(offer.createdAt).format("MMM DD, YYYY @ h:mm a")}</strong>
+                        {!offer.sentEmail ? (
+                          <div class="flex space-x-2">
+                            <form action={`/mark/${offer.id}`} method="post" target="dummy">
+                              <button class="font-semibold underline" type="submit">
+                                Already sent?
+                              </button>
+                            </form>
+                            <form action={`/send/${offer.id}`} method="post" target="dummy">
+                              <button class="font-semibold underline" type="submit">
+                                Send!
+                              </button>
+                            </form>
+                          </div>
+                        ) : (
+                          <div class="px-4 py-2 flex justify-end">
+                            <span class="font-semibold">Already sent!</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </>
                 ) : (
