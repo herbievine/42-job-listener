@@ -3,8 +3,8 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "bun run --hot src/index.ts",
-    "build": "bun build src/index.ts --target=bun --outdir=out",
+    "dev": "bun run --hot src/index.tsx",
+    "build": "bun build src/index.tsx --target=bun --outdir=out",
     "start": "bun run out/index.js",
     "db:gen": "bunx drizzle-kit generate",
     "db:migrate": "bun run src/db/migrate.ts"
